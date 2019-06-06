@@ -1,0 +1,22 @@
+RUS:
+select NAME_2, NL_NAME_2, AsGeoJson(geom) from vgpkg_RUS_adm2 where TYPE_2 like '%Gor%' order by NAME_2
+select  NAME_1, VARNAME_1, AsGeoJson(geom) as geom from vgpkg_RUS_adm1 where ENGTYPE_1 like '%City%'
+
+DEU:
+select NAME_2, NL_NAME_2, AsGeoJson(geom) from vgpkg_DEU_adm2 where TYPE_2 like '%Stadt%' order by NAME_2
+
+UKR:
+select NAME_2, NL_NAME_2, AsGeoJson(geom) from vgpkg_UKR_adm2 where TYPE_2 like '%Mist%' order by NAME_2
+select  NAME_1, VARNAME_1, AsGeoJson(geom) as geom from vgpkg_UKR_adm1 where ENGTYPE_1 like '%City%'
+
+POL:
+select NAME_2, NL_NAME_2, AsGeoJson(geom) from vgpkg_POL_adm2 where ENGTYPE_2 like '%City%' order by NAME_2
+
+
+select Intersects(GeomFromGeoJSON('{"type":"MultiPolygon","coordinates":[[[[47.96739959716807,56.62010574340825],[47.92400360107427,56.5950050354005],[47.85827636718761,56.6131820678712],[47.89142608642583,56.63989257812511],[47.95283889770507,56.63543319702159],[47.96739959716807,56.62010574340825]]]]}'),GeomFromGeoJSON('{"type":"Polygon","coordinates":[[[47.857668, 56.655922],[47.909316,56.655698],[47.908703,56.629544],[47.867617, 56.633372],[47.857668,56.655922]]]}')) as res
+
+select Intersects(GeomFromGeoJSON('{"type":"MultiPolygon","coordinates":[[[[47.96739959716807,56.62010574340825],[47.92400360107427,56.5950050354005],[47.85827636718761,56.6131820678712],[47.89142608642583,56.63989257812511],[47.95283889770507,56.63543319702159],[47.96739959716807,56.62010574340825]]]]}'),GeomFromGeoJSON('{"type":"Point","coordinates":[47.896874,56.635381]}')) as res
+
+select MbrMinX(GeomFromGeoJSON('{"type":"MultiPolygon","coordinates":[[[[47.96739959716807,56.62010574340825],[47.92400360107427,56.5950050354005],[47.85827636718761,56.6131820678712],[47.89142608642583,56.63989257812511],[47.95283889770507,56.63543319702159],[47.96739959716807,56.62010574340825]]]]}')) as min_lng
+
+http://geoserver.py/incity?data=56.630740, 47.867457,city.sqlite
