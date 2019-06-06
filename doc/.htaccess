@@ -1,0 +1,11 @@
+﻿# ----------------------------------------------------------------------
+# Allow loading of external fonts
+# ----------------------------------------------------------------------
+<FilesMatch "\.(ttf|otf|eot|woff)$">
+    <IfModule mod_headers.c>
+        SetEnvIf Origin "http://(www\.)?(geoserver.py|waronmap.com)$" AccessControlAllowOrigin=$0
+        Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+        Header merge Vary Origin
+    </IfModule>
+</FilesMatch>
+

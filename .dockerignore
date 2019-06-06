@@ -1,0 +1,8 @@
+﻿Dockerfile
+.idea
+.kdev4
+.git
+.gitignore
+doc
+venv
+
