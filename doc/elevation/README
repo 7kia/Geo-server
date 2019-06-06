@@ -1,0 +1,19 @@
+Создание базы данных SQLite хранящих
+высотные данные.
+
+Требования:
+nodejs с модулем sqlite3 (sudo npm install sqlite3)
+
+Порядок работы:
+
+1. Скачать файл с высотными данными
+wget http://www.ngdc.noaa.gov/mgg/global/relief/ETOPO1/data/ice_surface/grid_registered/xyz/ETOPO1_Ice_g_int.xyz.gz
+
+2. Запустить скрипт для парсинга:
+
+chmod +x Etopo2sqlite.js
+ ./Etopo2sqlite.js <data_file> <db_file> [<lat_min>] [<lat_max>] [<lng_min>] [<lng_max>],
+ где <data_file> файл с высотными данными
+ <db_file> имя файла создаваемой базы данных
+ [<lat_min>] [<lat_max>] [<lng_min>] [<lng_max>]  границы области для которой требуется получить базу,
+ если не заданы будет создана глобальная база данных
