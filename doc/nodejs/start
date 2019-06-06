@@ -1,0 +1,2 @@
+#! /bin/sh
+./geoservice_node.js 8081
