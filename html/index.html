@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Карта для проверки сервиса маршрутов на Pyhon</title>
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+	<link rel="stylesheet" href="/css/style.css" />
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<script src="js/lib/leaflet-providers.js"></script>
+	<script src="js/lib/google_tiles.js"></script>
+	<!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBNMmlRGBpvXMQNw4CW7NwuMzb0XeUrTV4"></script>
+    <script type="text/javascript" src="js/ajax.js"></script>
+    <script type="text/javascript" src="js/route.js"></script>
+	<script type="text/javascript" src="js/helper.js"></script>
+	<script type="text/javascript" src="js/time.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+
+</head>
+    <body>
+		<h4 class="title">
+			Карта для проверки сервиса маршрутов на 
+			<input type="radio" name="service" value="spatialite_python" checked/><label>Python</label>&nbsp;
+			<input type="radio" name="service" value="spatialite_php" /><label>PHP</label>&nbsp;
+			<input type="radio" name="service" value="spatialite_nodejs"/><label>NodeJs</label>&nbsp;
+			<input type="radio" name="service" value="google"/><label>Google</label>&nbsp;
+		</h4>
+		<div id="map-block"></div>
+		<div class="task" >
+            <input type="radio" name="task" value="route" checked/><label>Маршрутизация</label><br/>
+			<input type="radio" name="task" value="railwayRoute"/><label>Маршрутизация ж/д</label><br/>
+			<input type="radio" name="task" value="nearest"/><label>Ближайший узел</label><br/>
+			<input type="radio" name="task" value="nearest_railway"/><label>Ближайший узел ж/д</label><br/>
+            <input type="radio" name="task" value="city"/><label>Определение города</label><br/>
+            <input type="radio" name="task" value="land"/><label>Определение ландшафта</label><br/>
+            <input type="radio" name="task" value="water"/><label>Определение рек</label>
+        </div>
+        <div class="clr"></div>
+		<div class="service">
+			<select class="select" id="region">
+				<option value="RU-ME.osm">Марий Эл</option>
+				<option value="iraq-latest.osm">Ирак</option>
+				<option value="vietnam-latest.osm">Вьетнам</option>
+				<option value="syria-latest.osm">Сирия</option>
+				<option value="tajikistan-latest.osm">Таджикистан</option>
+				<option value="RU-LEN.osm">Ленингр-я обл.</option>
+				<option value="RU-MOS.osm">Моск. обл.</option>
+				<option value="israel-and-palestine-latest.osm">Израиль</option>
+				<option value="kosovo-latest.osm">Косово</option>
+				<option value="mongolia-latest.osm">Монголия</option>
+				<option value="pakistan-latest.osm">Пакистан</option>
+				<option value="ukraine-latest.osm">Украина</option>
+				<option value="crimean-fed-district-latest.osm">Крым</option>
+			</select>
+		</div>
+		
+		<!--
+		<button class="rad" id="all-roads">All roads</button>
+		<button class="rad" id="all-nodes">All nodes</button>
+		<button class="rad" id="del-enemies">Del. enemy</button>
+		<button class="rad" id="get-restr">Rest. nodes</button>
+		-->
+		<div id="preloader"><img src="/img/load.gif"/></div>
+		<label class="time-label">Time: </label><span class="time-label" id="time"></span>
+		<script type="text/javascript" src="js/map.js"></script>
+		<script type="text/javascript" src="js/handler.js"></script>
+    </body>
+</html>
