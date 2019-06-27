@@ -1,0 +1,35 @@
+﻿DirectoryIndex index.html index.wsgi
+AddHandler wsgi-script .wsgi
+Listen 8080
+<VirtualHost *:8080>
+	ServerName waronmap.com
+	ServerAdmin webmaster@localhost
+
+	AllowEncodedSlashes NoDecode
+
+	DocumentRoot /app/www-data/html
+	<Directory /app/www-data>
+		Require all granted
+		AllowOverride None
+		Options MultiViews ExecCGI
+		MultiviewsMatch Handlers
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+	
+	#use "production" for production
+	SetEnv ENV dev
+
+	WSGIScriptAlias /route /app/www-data/wsgi_app/route.py
+	WSGIScriptAlias /nearest /app/www-data/wsgi_app/nearest.py
+	WSGIScriptAlias /incity /app/www-data/wsgi_app/incity.py
+	WSGIScriptAlias /land /app/www-data/wsgi_app/land.py
+	WSGIScriptAlias /water /app/www-data/wsgi_app/water.py
+	WSGIScriptAlias /route_railway /app/www-data/wsgi_app/route_railway.py
+	WSGIScriptAlias /nearest_railway /app/www-data/wsgi_app/nearest_railway.py
+
+
+	WSGIDaemonProcess waronmap.com python-home=/app/virtualenv python-path=/app/pylibs
+	WSGIProcessGroup waronmap.com
+</VirtualHost>
