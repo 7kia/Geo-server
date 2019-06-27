@@ -2,7 +2,7 @@
 AddHandler wsgi-script .wsgi
 Listen 8080
 <VirtualHost 46.29.160.121:8080>
-	ServerName waronmap.com
+	ServerName www.waronmap.com
 	ServerAdmin webmaster@localhost
 
 	AllowEncodedSlashes NoDecode
@@ -30,6 +30,6 @@ Listen 8080
 	WSGIScriptAlias /nearest_railway /app/www-data/wsgi_app/nearest_railway.py
 
 
-	WSGIDaemonProcess waronmap.com python-home=/app/env python-path=/app/pylibs
-	WSGIProcessGroup waronmap.com
+	WSGIDaemonProcess www.waronmap.com python-home=/app/env python-path=/app/pylibs
+	WSGIProcessGroup www.waronmap.com
 </VirtualHost>
