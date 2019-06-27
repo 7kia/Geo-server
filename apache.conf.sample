@@ -8,7 +8,7 @@ Listen 8080
 	AllowEncodedSlashes NoDecode
 
 	DocumentRoot /app/html
-	<Directory /app/www-data>
+	<Directory /app/html>
 		Require all granted
 		AllowOverride None
 		Options MultiViews ExecCGI
