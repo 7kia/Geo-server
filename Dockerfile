@@ -35,8 +35,7 @@ COPY ./wsgi.conf.tmpl /tmp/wsgi.conf.tmpl
 RUN sed -e s/\$PYVERSION/$PYVERSION/g /tmp/wsgi.conf.tmpl | sed -e s/\$PYV/`echo $PYVERSION | sed -e "s/\\.//"`/g >/etc/apache2/mods-enabled/wsgi.conf
 ONBUILD COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
-RUN ls /app/env/lib/python$PYVERSION/site-packages/mod_wsgi/server/
 
 # Start Apache
 EXPOSE 8080
-CMD ["/bin/sh", "/start-apache.sh"]
+CMD ["/bin/sh", "-c","/start-apache.sh"]

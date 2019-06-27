@@ -30,6 +30,6 @@ Listen 8080
 	WSGIScriptAlias /nearest_railway /app/www-data/wsgi_app/nearest_railway.py
 
 
-	WSGIDaemonProcess waronmap.com python-home=/app/virtualenv python-path=/app/pylibs
+	WSGIDaemonProcess waronmap.com python-home=/app/env python-path=/app/pylibs
 	WSGIProcessGroup waronmap.com
 </VirtualHost>
