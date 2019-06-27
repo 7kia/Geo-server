@@ -2,12 +2,12 @@
 AddHandler wsgi-script .wsgi
 Listen 8080
 <VirtualHost 46.29.160.121:8080>
-	ServerName www.waronmap.com
+	ServerName waronmap.com
 	ServerAdmin webmaster@localhost
 
 	AllowEncodedSlashes NoDecode
 
-	DocumentRoot /app/www-data/html
+	DocumentRoot /app/html
 	<Directory /app/www-data>
 		Require all granted
 		AllowOverride None
@@ -21,15 +21,15 @@ Listen 8080
 	#use "production" for production
 	SetEnv ENV dev
 
-	WSGIScriptAlias /route /app/www-data/wsgi_app/route.py
-	WSGIScriptAlias /nearest /app/www-data/wsgi_app/nearest.py
-	WSGIScriptAlias /incity /app/www-data/wsgi_app/incity.py
-	WSGIScriptAlias /land /app/www-data/wsgi_app/land.py
-	WSGIScriptAlias /water /app/www-data/wsgi_app/water.py
-	WSGIScriptAlias /route_railway /app/www-data/wsgi_app/route_railway.py
-	WSGIScriptAlias /nearest_railway /app/www-data/wsgi_app/nearest_railway.py
+	WSGIScriptAlias /route /app/wsgi_app/route.py
+	WSGIScriptAlias /nearest /app/wsgi_app/nearest.py
+	WSGIScriptAlias /incity /app/wsgi_app/incity.py
+	WSGIScriptAlias /land /app/wsgi_app/land.py
+	WSGIScriptAlias /water /app/wsgi_app/water.py
+	WSGIScriptAlias /route_railway /app/wsgi_app/route_railway.py
+	WSGIScriptAlias /nearest_railway /app/wsgi_app/nearest_railway.py
 
 
-	WSGIDaemonProcess www.waronmap.com python-home=/app/env python-path=/app/pylibs
-	WSGIProcessGroup www.waronmap.com
+	WSGIDaemonProcess waronmap.com python-home=/app/env python-path=/app/pylibs
+	WSGIProcessGroup waronmap.com
 </VirtualHost>

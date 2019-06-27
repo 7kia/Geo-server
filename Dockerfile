@@ -18,8 +18,11 @@ RUN pip install virtualenv
 # Prepare virtualenv
 RUN mkdir /app
 WORKDIR /app
-RUN virtualenv env
 
+COPY . /app
+
+RUN virtualenv env
+RUN ls
 RUN ./env/bin/pip install --upgrade pip setuptools
 
 # Install mod_wsgi
