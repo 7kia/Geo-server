@@ -1,5 +1,4 @@
-﻿DirectoryIndex index.html index.wsgi
-AddHandler wsgi-script .wsgi
+﻿
 Listen 8080
 <VirtualHost 46.29.160.121:8080>
 	ServerName waronmap.com
