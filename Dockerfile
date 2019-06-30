@@ -41,5 +41,5 @@ ONBUILD COPY apache.conf /etc/apache2/sites-available/000-default.conf
 VOLUME  /app /home/war-on-map/Geo-server
 
 # Start Apache
-EXPOSE 8080
+EXPOSE 8080:8080
 CMD ["/bin/sh", "-c","/start-apache.sh"]
