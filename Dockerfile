@@ -14,6 +14,7 @@ RUN locale-gen
 
 # Install venv
 RUN pip install virtualenv
+RUN pip install --upgrade virtualenv
 
 # Prepare virtualenv
 RUN mkdir /var/www/geoserver
