@@ -1,4 +1,4 @@
-#!/bin/sh
+﻿#!/bin/sh
 
 set -e
 
@@ -6,5 +6,5 @@ set -e
 
 mkdir /var/run/apache2
 mkdir /var/lock/apache2
-chown root:www-data /var/lock/apache2
+chown root:/var/www/geoserver /var/lock/apache2
 exec /usr/sbin/apache2 -k start -DFOREGROUND
