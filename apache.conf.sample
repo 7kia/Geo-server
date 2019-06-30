@@ -1,4 +1,4 @@
-﻿
+
 Listen 8080
 <VirtualHost 46.29.160.121:8080>
 	ServerName waronmap.com
@@ -6,8 +6,8 @@ Listen 8080
 
 	AllowEncodedSlashes NoDecode
 
-	DocumentRoot /app/html
-	<Directory /app/html>
+	DocumentRoot /var/www/geoserver/html
+	<Directory /var/www/geoserver/html>
 		Require all granted
 		AllowOverride None
 		Options MultiViews ExecCGI
@@ -20,15 +20,15 @@ Listen 8080
 	#use "production" for production
 	SetEnv ENV dev
 
-	WSGIScriptAlias /route /app/wsgi_app/route.py
-	WSGIScriptAlias /nearest /app/wsgi_app/nearest.py
-	WSGIScriptAlias /incity /app/wsgi_app/incity.py
-	WSGIScriptAlias /land /app/wsgi_app/land.py
-	WSGIScriptAlias /water /app/wsgi_app/water.py
-	WSGIScriptAlias /route_railway /app/wsgi_app/route_railway.py
-	WSGIScriptAlias /nearest_railway /app/wsgi_app/nearest_railway.py
+	WSGIScriptAlias /route /var/www/geoserver/wsgi_app/route.py
+	WSGIScriptAlias /nearest /var/www/geoserver/wsgi_app/nearest.py
+	WSGIScriptAlias /incity /var/www/geoserver/wsgi_app/incity.py
+	WSGIScriptAlias /land /var/www/geoserver/wsgi_app/land.py
+	WSGIScriptAlias /water /var/www/geoserver/wsgi_app/water.py
+	WSGIScriptAlias /route_railway /var/www/geoserver/wsgi_app/route_railway.py
+	WSGIScriptAlias /nearest_railway /var/www/geoserver/wsgi_app/nearest_railway.py
 
 
-	WSGIDaemonProcess waronmap.com python-home=/app/env python-path=/app/pylibs
+	WSGIDaemonProcess waronmap.com python-home=/var/www/geoserver/env python-path=/var/www/geoserver/pylibs
 	WSGIProcessGroup waronmap.com
 </VirtualHost>
