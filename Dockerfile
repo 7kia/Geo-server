@@ -38,7 +38,7 @@ COPY ./wsgi.conf.tmpl /tmp/wsgi.conf.tmpl
 RUN sed -e s/\$PYVERSION/$PYVERSION/g /tmp/wsgi.conf.tmpl | sed -e s/\$PYV/`echo $PYVERSION | sed -e "s/\\.//"`/g >/etc/apache2/mods-enabled/wsgi.conf
 ONBUILD COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
-VOLUME /home/war-on-map/Geo-server /app 
+VOLUME  /app /home/war-on-map/Geo-server
 
 # Start Apache
 EXPOSE 8080
