@@ -12,6 +12,8 @@ RUN apt-get -yqq update && \
 COPY ./locale.gen /etc/locale.gen
 RUN locale-gen
 
+COPY apache.conf.sample /etc/apache2/sites-available/000-default.conf
+
 # Install venv
 RUN pip install virtualenv
 RUN pip install --upgrade virtualenv
@@ -29,7 +31,6 @@ RUN ./env/bin/pip install --upgrade pip setuptools
 # Install mod_wsgi
 RUN ./env/bin/pip install mod_wsgi
 
-
 # Prepare app directory
 RUN mkdir ./pylibs
 
@@ -37,7 +38,7 @@ RUN mkdir ./pylibs
 COPY ./start-apache.sh /
 COPY ./wsgi.conf.tmpl /tmp/wsgi.conf.tmpl
 RUN sed -e s/\$PYVERSION/$PYVERSION/g /tmp/wsgi.conf.tmpl | sed -e s/\$PYV/`echo $PYVERSION | sed -e "s/\\.//"`/g >/etc/apache2/mods-enabled/wsgi.conf
-ONBUILD COPY apache.conf /etc/apache2/sites-available/000-default.conf
+ONBUILD COPY apache.conf.sample /etc/apache2/sites-available/000-default.conf
 
 VOLUME /var/www/geoserver /home/war-on-map/Geo-server
 
