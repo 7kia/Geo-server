@@ -8,8 +8,6 @@ RUN apt-get -yqq update && \
     apt-get -yqq install apache2 apache2-dev locales && \
     apt-get clean
 
-
-
 RUN apt-get install -y libapache2-mod-wsgi
 RUN a2enmod wsgi
 RUN service apache2 restart
@@ -21,7 +19,6 @@ COPY ./locale.gen /etc/locale.gen
 RUN locale-gen
 
 
-VOLUME /var/www/bases/ /var/www/bases/
 COPY apache.conf.sample /etc/apache2/sites-available/000-default.conf
 
 # Install venv
@@ -33,20 +30,14 @@ RUN mkdir /var/www/Geo-server
 COPY . /var/www/Geo-server
 WORKDIR /var/www/Geo-server
 
+# Install 
 RUN virtualenv venv
-
 RUN ./venv/bin/pip2 install --upgrade pip setuptools
-
-# Install mod_wsgi
-RUN ./venv/bin/pip2 install mod_wsgi
-
-#RUN ./venv/bin/pip2 install git+https://github.com/lokkju/pyspatialite.git#egg=pyspatialite
-
-RUN ls -c ./venv/lib/python2.7/site-packages
+RUN ./venv/bin/pip2 install mod_wsgi==4.4.12
 COPY pyspatialite ./venv/lib/python2.7/site-packages/pyspatialite
 
-
-
+#RUN mkdir venv
+#COPY venvCD/venv /venv
 
 
 # Prepare app directory
@@ -56,8 +47,8 @@ RUN mkdir ./pylibs
 COPY ./start-apache.sh /
 COPY ./wsgi.conf.tmpl /tmp/wsgi.conf.tmpl
 RUN sed -e s/\$PYVERSION/$PYVERSION/g /tmp/wsgi.conf.tmpl | sed -e s/\$PYV/`echo $PYVERSION | sed -e "s/\\.//"`/g >/etc/apache2/mods-enabled/wsgi.conf
-#ONBUILD COPY apache.conf.sample /etc/apache2/sites-available/000-default.conf
-VOLUME /home/war-on-map/Geo-server/ /var/www/Geo-server/
+RUN mkdir /var/www/bases/
+VOLUME /var/www/bases/ /var/www/bases/
 
 # Start Apache
 EXPOSE 8080:8080
