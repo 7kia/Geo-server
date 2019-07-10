@@ -1,17 +1,17 @@
 #coding=utf-8
+from cgi import parse_qs, escape
 # importing pyspatialite
+from pyspatialite import dbapi2 as db
+import time
 import os
-import sys
-from sqlite3 import dbapi2 as db
+import math
 
+import sys
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
 import json
-
-import falcon
-import cors
 
 DB_DIR = config.DB_DIR
 PLACES_DB_FILE = 'places.sqlite'
@@ -92,22 +92,3 @@ def getPlace(point_lat, point_lng):
     else:
         places.sort(key = lambda x: x['rast'])
         return (places[0]['place_name'], places[0]['place_type'], places[0]['place_geometry'])
-
-class ListCityLite(object):
-    cors = cors.public_cors
-
-    def on_get(self, req, resp):
-        db_file = CITY_DB_FILE
-        listcity = getListCity(db_file)
-        if listcity != None:
-            response = json.dumps({'city_list': listcity})
-            # response = '{"city_list":[' + ','.join(listcity) + ']}'
-            # response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '"}'
-        else:
-            response = '{"city_list":[]}'
-        resp.set_header('Content-type', 'text/html; charset=utf-8')
-        resp.status = falcon.HTTP_200
-
-        resp.body = response
-
-listCityLite = ListCityLite()

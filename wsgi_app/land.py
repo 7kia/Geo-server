@@ -1,13 +1,12 @@
-# coding=utf-8
-import os
-import sys
-from cgi import parse_qs
+#coding=utf-8
+from cgi import parse_qs, escape
 # importing pyspatialite
-from sqlite3 import dbapi2 as db
+from pyspatialite import dbapi2 as db
+import time
+import os
+import math
 
-import cors
-import falcon
-
+import sys
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
@@ -21,31 +20,26 @@ def application(environ, start_response):
     status = '200 OK'
     d = parse_qs(environ['QUERY_STRING'])
     data = d['data'][0].split(',')
-    print(data)
+    print data
     point_lat = float(data[0])
     point_lng = float(data[1])
     db_file = DB_FILE
     res = searchObject(point_lat, point_lng, db_file)
-    print(res)
+    print res
     if res != None:
-        response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + res[1] + '","geometry":' + res[
-            2] + ', "country":"' + res[3] + '", "id":' + str(res[4]) + ', "avg_lat":' + str(
-            res[5]) + ', "avg_lng":' + str(res[6]) + '}'
-
+        response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + res[1] + '","geometry":' + res[2] + ', "country":"' + res[3] + '", "id":' + str(res[4])+ ', "avg_lat":'+str(res[5])+', "avg_lng":'+str(res[6])+'}'
+        
     else:
         response = '{"res":false}'
     response_headers = [('Content-type', 'text/html; charset=utf-8'), ('Access-Control-Allow-Origin', '*')]
     start_response(status, response_headers)
     return [response]
 
-
-# определение пересечения точки с полигоном города и возврат в случае пересечения имени города и его полигона
+#определение пересечения точки с полигоном города и возврат в случае пересечения имени города и его полигона
 def searchObject(point_lat, point_lng, db_file):
     conn = db.connect(DB_DIR + db_file)
     cur = conn.cursor()
-    sql = "SELECT id, geometry, name, sub_type, country, min_lat, min_lng, max_lat, max_lng FROM object WHERE min_lng <= " + str(
-        point_lng) + " AND min_lat <= " + str(point_lat) + " AND max_lng  >= " + str(
-        point_lng) + " AND max_lat >= " + str(point_lat)
+    sql = "SELECT id, geometry, name, sub_type, country, min_lat, min_lng, max_lat, max_lng FROM object WHERE min_lng <= " + str(point_lng) + " AND min_lat <= " + str(point_lat) + " AND max_lng  >= " + str(point_lng) + " AND max_lat >= " + str(point_lat)
     id = -1
     res = cur.execute(sql)
     for rec in res:
@@ -65,56 +59,24 @@ def searchObject(point_lat, point_lng, db_file):
     res = cur.execute(sql)
     in_obj = 0
     for rec in res:
-        print('rec=' + str(rec))
+        print 'rec=' + str(rec)
         in_obj = rec[0]
     cur.close()
     conn.close()
     if in_obj == 1:
-        return (name, sub_type, geometry, country, id, (min_lat + max_lat) / 2, (min_lng + max_lng) / 2)
+        return (name, sub_type, geometry, country, id, (min_lat+max_lat)/2, (min_lng+max_lng)/2)
     else:
         return None
 
 
 def sub_type_filter(sub_type):
     land = {}
-    land['grass'] = ['grass', 'forest', 'cemetery', 'allotments', 'meadow', 'farmland', 'churchyard', 'harbour',
-                     'coastline', 'beach', 'heath', 'grassland', 'meadow', 'valley']
-    land['retail'] = ['residential', 'retail', 'commercial', 'military', 'industrial', 'garages', 'construction',
-                      'brownfield', 'railway', 'farmyard', 'farmland', 'depot', 'farm', 'beach_resort', 'village_green',
-                      'quarry', 'winter_sports', 'abandoned', 'religious', 'governmental', 'port']
-    land['wood'] = ['logging', 'natural', 'wood']
-    land['hard'] = ['wetland', 'scrub', 'mud', 'mud', 'scree', 'rock', 'ridge', 'sand', 'shingle', 'water', 'landfill']
-
+    land['grass'] = ['grass','forest','cemetery','allotments','meadow','farmland', 'churchyard','harbour','coastline','beach','heath','grassland','meadow','valley']
+    land['retail'] = ['residential','retail','commercial','military','industrial','garages','construction','brownfield','railway','farmyard','farmland','depot','farm','beach_resort','village_green','quarry','winter_sports','abandoned','religious','governmental','port']
+    land['wood'] = ['logging','natural', 'wood']
+    land['hard'] = ['wetland','scrub','mud','mud','scree','rock','ridge','sand','shingle','water','landfill']
+    
     for key, val in land.items():
         if sub_type in val:
             return key
     return 'unknown'
-
-
-class Land(object):
-    cors = cors.public_cors
-
-    def on_get(self, req, resp):
-        dataParam = req.get_param('data')
-        data = dataParam.split(',')
-
-        # print(data)
-        point_lat = float(data[0])
-        point_lng = float(data[1])
-        db_file = DB_FILE
-        res = searchObject(point_lat, point_lng, db_file)
-        # print(res)
-        if res != None:
-            response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + res[1] + '","geometry":' + res[
-                2] + ', "country":"' + res[3] + '", "id":' + str(res[4]) + ', "avg_lat":' + str(
-                res[5]) + ', "avg_lng":' + str(res[6]) + '}'
-
-        else:
-            response = '{"res":false}'
-
-        resp.set_header('Content-type', 'text/html; charset=utf-8')
-        resp.status = falcon.HTTP_200
-
-        resp.body = response
-
-land = Land()

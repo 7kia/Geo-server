@@ -1,10 +1,12 @@
 #coding=utf-8
-import os
-import sys
-from cgi import parse_qs
+from cgi import parse_qs, escape
 # importing pyspatialite
-from sqlite3 import dbapi2 as db
+from pyspatialite import dbapi2 as db
+import time
+import os
+import math
 
+import sys
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)

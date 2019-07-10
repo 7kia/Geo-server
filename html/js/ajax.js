@@ -46,6 +46,7 @@ var Ajax =
 
 
         XMLHttp.open(method, url, true);
+        this.setCors(XMLHttp, new URL(url));
         XMLHttp.onreadystatechange = function(){
             console.log('XMLHttp.readyState ', XMLHttp.readyState);
             console.log('XMLHttp.status ', XMLHttp.status);
@@ -68,7 +69,49 @@ var Ajax =
             XMLHttp.send(null);
         }
     },
-    
+
+    /**
+    * @param XMLHttp - XMLHttpRequest
+    * @param url - string
+    */
+    setCors: function (XMLHttp, url) {
+        var address = this.getAllowOrigin(url);
+        console.log("setCors() { address = ", + address)
+        if (address) {
+            XMLHttp.setRequestHeader('Access-Control-Allow-Origin', address);
+        }
+    },
+
+    /**
+    * @param url - string
+    * return url - string
+    */
+    getAllowOrigin: function (url) {
+        console.log("getAllowOrigin() { url = ", + url)
+        var allowedOrigins = {
+            'geoserver.py': ["8080"],
+            'waronmap.com': ["80", "8080"],// 8080 - порт геосервера
+            'localhost': ["80", "8080"],
+        };
+
+        if (this.checkHostname(url.hostname, allowedOrigins)) {
+            if (this.checkHostPort(url, allowedOrigins)) {
+                return 'http://' + url.hostname + ':' + url.port;
+            }
+        }
+
+        return null;
+    },
+
+    checkHostname: function (hostname, allowedOrigins) {
+        const keys = Object.keys(allowedOrigins);
+        return keys.indexOf(hostname) > -1;
+    },
+
+    checkHostPort: function (url, allowedOrigins) {
+        const ports = allowedOrigins[url.hostname];
+        return ports.indexOf(url.port) > -1;
+    },
     /**
     * отправка запроса
     * @param method метод запроса

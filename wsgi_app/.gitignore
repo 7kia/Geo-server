@@ -1,1 +1,5 @@
-*.log
+﻿*.xml
+venv
+env
+venvOld
+.idea

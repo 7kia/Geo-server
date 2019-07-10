@@ -1,4 +1,4 @@
-body
+﻿body
 {
     background-image: url(/img/bg/2.jpg);
 }
@@ -129,7 +129,6 @@ hr
 {
     width: 300px;
     float: left;
-    padding-top: 200px;
 }
 
 .task input

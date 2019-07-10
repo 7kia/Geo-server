@@ -1,13 +1,11 @@
-import math
-import os
-import sys
+from cgi import escape
+from urlparse import parse_qs
 # importing pyspatialite
+from pyspatialite import dbapi2 as db
 import time
-from urllib.parse import parse_qs
-
-import cors
-import falcon
-from dbManager import dbManager
+import os
+import math
+import sys
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -17,42 +15,36 @@ import config
 DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
+
 def application(environ, start_response):
     begin=time.clock()
     status = '200 OK'
     d = parse_qs(environ['QUERY_STRING'])
     data = d['data'][0].split(',')
-
-    #print(data)
+    #print data
     start_lat = float(data[0])
     start_lng = float(data[1])
     end_lat = float(data[2])
     end_lng = float(data[3])
     filename = data[4]
     scale = int(data[5])
-
     before_searchBestDbFile = time.clock()
     db_file = searchBestDbFile((start_lat,start_lng),(end_lat,end_lng),filename)
-    #print('using db_file='+db_file)
+    #print 'using db_file='+db_file
     after_searchBestDbFile = time.clock()
-
     route = getRoute((start_lat,start_lng),(end_lat,end_lng),db_file,scale)
     after_getRoute = time.clock()
-
     response = "".join([str(route)])
     response_headers = [('Content-type', 'text/html'),('Access-Control-Allow-Origin','*'),('Content-Length',str(len(response)))]
     start_response(status, response_headers)
-
-    print('begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f'
-          % (begin, before_searchBestDbFile, after_searchBestDbFile, after_getRoute))
-    print( 'time_for_find_files=%s  time_for_find_route=%f'
-           % (after_searchBestDbFile - before_searchBestDbFile, after_getRoute - after_searchBestDbFile))
+    print 'begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f' % (begin, before_searchBestDbFile, after_searchBestDbFile, after_getRoute)
+    print 'time_for_find_files=%s  time_for_find_route=%f' % (after_searchBestDbFile - before_searchBestDbFile, after_getRoute - after_searchBestDbFile)
     return [response]
 
 def getRoute(start,end,db_file,scale):
     # creating/connecting the db
-    #print('db_file='+db_file)
-    conn = dbManager.getDb(DB_DIR + db_file)#db.connect(DB_DIR + db_file)
+    #print 'db_file='+db_file
+    conn = db.connect(DB_DIR + db_file)
     # creating a Cursor
     cur = conn.cursor()
     id_start = getNodeId(cur,start,scale)
@@ -61,8 +53,8 @@ def getRoute(start,end,db_file,scale):
     rs = cur.execute(sql)
     for row in rs:
         result = row[0]
-    #cur.close()
-    #conn.close()
+    cur.close()
+    conn.close()
     return result
 #+'='+DB_DIR+'='+config.HOSTNAME
 
@@ -76,20 +68,17 @@ def latlng2sector(lat,lng,scale):
 def getNodeId(cur,point,scale):
     #sql = 'select node_id, MIN(Distance(geometry,MakePoint('+str(start[1])+','+str(start[0])+'))) as rast from roads_nodes'
     sector = latlng2sector(point[0],point[1],scale)
-    print('sector=%i' % sector)
+    print 'sector=%i' % sector
     try:
-        sql = 'select node_id, MIN(' \
-              'Pow(('+str(point[1])+'-X(geometry)),2) ' \
-               '+ Pow(('+str(point[0])+'-Y(geometry)),2)' \
-                                       ') as rast from roads_nodes where connected=1 and sector='+str(sector)
+        sql = 'select node_id, MIN(Pow(('+str(point[1])+'-X(geometry)),2) +Pow(('+str(point[0])+'-Y(geometry)),2)) as rast from roads_nodes where connected=1 and sector='+str(sector)
         rs = cur.execute(sql)
     except:
-        print('Except: without using "connected" ')
+        print 'Except: without using "connected" '
         try:
             sql = 'select node_id, MIN(Pow(('+str(point[1])+'-X(geometry)),2) +Pow(('+str(point[0])+'-Y(geometry)),2)) as rast from roads_nodes where sector='+str(sector)
             rs = cur.execute(sql)
         except:
-            print('Ecxcept: without using "connected and "sector"')
+            print 'Ecxcept: without using "connected and "sector"'
             sql = 'select node_id, MIN(Pow(('+str(point[1])+'-X(geometry)),2) +Pow(('+str(point[0])+'-Y(geometry)),2)) as rast from roads_nodes'
             rs = cur.execute(sql)
     node_id = 0
@@ -145,47 +134,3 @@ def getAreaSize(filename):
         return MIN_SIZE_DEFAULT
     size = boundary['top'] - boundary['bottom']
     return size
-
-
-
-class Route(object):
-    cors = cors.public_cors
-    def on_get(self, req, resp):
-        begin=time.clock()
-        dataParam = req.get_param('data')
-        data = dataParam.split(',')
-
-        start_lat = float(data[0])
-        start_lng = float(data[1])
-        end_lat = float(data[2])
-        end_lng = float(data[3])
-        filename = data[4]
-        scale = int(data[5])
-
-        before_searchBestDbFile = time.clock()
-        db_file = searchBestDbFile((start_lat, start_lng), (end_lat, end_lng), filename)
-        # print('using db_file='+db_file)
-        after_searchBestDbFile = time.clock()
-
-        route = getRoute((start_lat, start_lng), (end_lat, end_lng), db_file, scale)
-        after_getRoute = time.clock()
-
-        response = "".join([str(route)])
-        resp.set_header('Content-type', 'text/html')
-        resp.set_header('Content-Length', str(len(response)))
-        resp.status = falcon.HTTP_200
-
-        print('begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f' % (
-            begin,
-            before_searchBestDbFile,
-            after_searchBestDbFile,
-            after_getRoute
-        ))
-        print('time_for_find_files=%s  time_for_find_route=%f' % (
-            after_searchBestDbFile - before_searchBestDbFile,
-            after_getRoute - after_searchBestDbFile
-        ))
-        resp.body = response
-route = Route()
-
-

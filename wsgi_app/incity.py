@@ -1,10 +1,12 @@
 #coding=utf-8
-import os
-import sys
-from cgi import parse_qs
+from cgi import parse_qs, escape
 # importing pyspatialite
-from sqlite3 import dbapi2 as db
+from pyspatialite import dbapi2 as db
+import time
+import os
+import math
 
+import sys
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
@@ -19,12 +21,12 @@ def application(environ, start_response):
     status = '200 OK'
     d = parse_qs(environ['QUERY_STRING'])
     data = d['data'][0].split(',')
-    #print(data)
+    #print data
     point_lat = float(data[0])
     point_lng = float(data[1])
     db_file = CITY_DB_FILE
     city = getCity(point_lat, point_lng, db_file)
-    #print(city)
+    #print city
     if city != None:
         response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '","city_geometry":' + city[2] + ',"id":'+ str(city[3]) +'}'
         #response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '"}'
@@ -46,14 +48,14 @@ def getCity(point_lat, point_lng, db_file):
         city_geometry = rec[1].strip().encode('utf-8')
         city_name = rec[2].encode('utf-8')
         city_lastname = rec[3].encode('utf-8')
-        #print('city_name: '+city_name)
+        #print 'city_name: '+city_name
         point_geometry = '{"type":"Point","coordinates":[' + str(point_lng) + ',' + str(point_lat) + ']}'
         if id != -1:
             sql = "SELECT Intersects(GeomFromGeoJSON('" + city_geometry + "'),GeomFromGeoJSON('" + point_geometry + "'))"
             res2 = cur.execute(sql)
             in_city = 0
             for rec2 in res2:
-                print('rec=' + str(rec2))
+                print 'rec=' + str(rec2)
                 in_city = rec2[0]
                 if in_city == 1:
                     cur.close()

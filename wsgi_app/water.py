@@ -1,15 +1,13 @@
 #coding=utf-8
-import json
-import math
-import os
-import sys
-from cgi import parse_qs
+from cgi import parse_qs, escape
 # importing pyspatialite
-from sqlite3 import dbapi2 as db
+from pyspatialite import dbapi2 as db
+import time
+import os
+import math
+import json
 
-import cors
-import falcon
-
+import sys
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
@@ -17,6 +15,29 @@ import config
 
 DB_DIR = config.DB_DIR
 DB_FILE = 'water.sqlite'
+
+def application(environ, start_response):
+    status = '200 OK'
+    d = parse_qs(environ['QUERY_STRING'])
+    data = d['data'][0].split(',')
+    #print data
+    lat1 = float(data[0])
+    lng1 = float(data[1])
+    lat2 = float(data[2])
+    lng2 = float(data[3])
+    db_file = DB_DIR + DB_FILE
+    res = getWidthRiver((lat1,lng1), (lat2,lng2), db_file)
+    #print res
+    if res != None:
+        response = json.dumps({"res":True, "waters":res})   
+    else:
+        response = json.dumps({"res":False})
+    #print response
+    response_headers = [('Content-type', 'text/html; charset=utf-8'), ('Access-Control-Allow-Origin', '*')]
+    start_response(status, response_headers)
+    return [response]
+
+
 
 
 #расчет рстояния между двумя точками на сфере
@@ -79,7 +100,7 @@ def getWidthRiver(unit1, unit2, db_file):
             out[row[0]] = {'id': row[0], 'width': -1, 'country': row[4], 'geometry': json.loads(row[3])}
     sql.close()
     conn.close()
-    #print()out
+    #print out
     if water != 0:
         return out
     else:
@@ -88,49 +109,4 @@ def getWidthRiver(unit1, unit2, db_file):
 #coordinates = json.dumps([[21.012357,52.499875], [20.919307,52.281555]])
 #water?data=21.012357,52.499875,20.919307,52.281555
 #a = getWidthRiver(coordinates)
-#print()(a)
-def application(environ, start_response):
-    status = '200 OK'
-    d = parse_qs(environ['QUERY_STRING'])
-    data = d['data'][0].split(',')
-    #print()data
-    lat1 = float(data[0])
-    lng1 = float(data[1])
-    lat2 = float(data[2])
-    lng2 = float(data[3])
-    db_file = DB_DIR + DB_FILE
-    res = getWidthRiver((lat1,lng1), (lat2,lng2), db_file)
-    #print()res
-    if res != None:
-        response = json.dumps({"res":True, "waters":res})
-    else:
-        response = json.dumps({"res":False})
-    #print()response
-    response_headers = [('Content-type', 'text/html; charset=utf-8'), ('Access-Control-Allow-Origin', '*')]
-    start_response(status, response_headers)
-    return [response]
-
-
-class WaterObject(object):
-    cors = cors.public_cors
-    def on_get(self, req, resp):
-        dataParam = req.get_param('data')
-        data = dataParam.split(',')
-
-        lat1 = float(data[0])
-        lng1 = float(data[1])
-        lat2 = float(data[2])
-        lng2 = float(data[3])
-        db_file = DB_DIR + DB_FILE
-        res = getWidthRiver((lat1, lng1), (lat2, lng2), db_file)
-        # print()res
-        if res != None:
-            response = json.dumps({"res": True, "waters": res})
-        else:
-            response = json.dumps({"res": False})
-
-        resp.set_header('Content-type', 'text/html; charset=utf-8')
-        resp.status = falcon.HTTP_200
-
-        resp.body = response
-waterObject = WaterObject()
+#print (a)

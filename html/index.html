@@ -27,8 +27,7 @@
 			<input type="radio" name="service" value="spatialite_nodejs"/><label>NodeJs</label>&nbsp;
 			<input type="radio" name="service" value="google"/><label>Google</label>&nbsp;
 		</h4>
-		<div id="map-block"></div>
-		<div class="task" >
+<div class="task" >
             <input type="radio" name="task" value="route" checked/><label>Маршрутизация</label><br/>
 			<input type="radio" name="task" value="railwayRoute"/><label>Маршрутизация ж/д</label><br/>
 			<input type="radio" name="task" value="nearest"/><label>Ближайший узел</label><br/>
@@ -40,6 +39,7 @@
         <div class="clr"></div>
 		<div class="service">
 			<select class="select" id="region">
+				<option value="ukraine-latest.osm">Украина</option>
 				<option value="RU-ME.osm">Марий Эл</option>
 				<option value="iraq-latest.osm">Ирак</option>
 				<option value="vietnam-latest.osm">Вьетнам</option>
@@ -51,10 +51,13 @@
 				<option value="kosovo-latest.osm">Косово</option>
 				<option value="mongolia-latest.osm">Монголия</option>
 				<option value="pakistan-latest.osm">Пакистан</option>
-				<option value="ukraine-latest.osm">Украина</option>
+				
 				<option value="crimean-fed-district-latest.osm">Крым</option>
 			</select>
 		</div>
+		<label class="time-label">Time: </label><span class="time-label" id="time"></span>
+		<div id="map-block"></div>
+		
 		
 		<!--
 		<button class="rad" id="all-roads">All roads</button>
@@ -63,7 +66,7 @@
 		<button class="rad" id="get-restr">Rest. nodes</button>
 		-->
 		<div id="preloader"><img src="/img/load.gif"/></div>
-		<label class="time-label">Time: </label><span class="time-label" id="time"></span>
+		
 		<script type="text/javascript" src="js/map.js"></script>
 		<script type="text/javascript" src="js/handler.js"></script>
     </body>
