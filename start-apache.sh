@@ -1,4 +1,4 @@
-﻿set -e
+﻿# set -e
 
 . /etc/apache2/envvars
 
