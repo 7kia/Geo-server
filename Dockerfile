@@ -18,7 +18,7 @@ RUN apt-get -yqq install python-pyspatialite
 COPY ./locale.gen /etc/locale.gen
 RUN locale-gen
 
-
+# Replace config
 COPY apache.conf.sample /etc/apache2/sites-available/000-default.conf
 
 # Install venv
@@ -36,10 +36,6 @@ RUN ./venv/bin/pip2 install --upgrade pip setuptools
 RUN ./venv/bin/pip2 install mod_wsgi==4.4.12
 COPY pyspatialite ./venv/lib/python2.7/site-packages/pyspatialite
 
-#RUN mkdir venv
-#COPY venvCD/venv /venv
-
-
 # Prepare app directory
 RUN mkdir ./pylibs
 
@@ -47,8 +43,6 @@ RUN mkdir ./pylibs
 COPY ./start-apache.sh /
 COPY ./wsgi.conf.tmpl /tmp/wsgi.conf.tmpl
 RUN sed -e s/\$PYVERSION/$PYVERSION/g /tmp/wsgi.conf.tmpl | sed -e s/\$PYV/`echo $PYVERSION | sed -e "s/\\.//"`/g >/etc/apache2/mods-enabled/wsgi.conf
-RUN mkdir /var/www/bases/
-VOLUME /var/www/bases/ /var/www/bases/
 
 # Start Apache
 EXPOSE 8080:8080
