@@ -25,9 +25,14 @@ def application(environ, start_response):
 	scale = int(data[3])
 	db_file = searchBestDbFile((point_lat,point_lng),filename)
 	#print 'using db_file='+db_file
-	nearest = getNearest((point_lat,point_lng),db_file,scale)
-	response = "".join([str(nearest)])
-	response_headers = [('Content-type', 'text/html'),('Access-Control-Allow-Origin','*'),('Content-Length',str(len(response)))]
+	response = ""
+	try:
+		nearest = getNearest((point_lat, point_lng), db_file, scale)
+		response = "".join([str(nearest)])
+	except BaseException as e:
+		response = "".join([str(e) + "db_file=" + str(os.listdir(DB_DIR))])
+	response_headers = [('Content-type', 'text/html'), ('Access-Control-Allow-Origin', '*'),
+						('Content-Length', str(len(response)))]
 	start_response(status, response_headers)
 	return [response]
 
