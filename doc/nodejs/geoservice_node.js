@@ -8,7 +8,7 @@ var app = express();
 var server = require('http').Server(app);
 var fs = require('fs');
 var sqlite = require('spatialite');
-var DB_DIR = '/home/ilya/war-on-map/Geo-server/bases/';
+var DB_DIR = '/home/ilya/war-on-map/bases/';
 var MIN_SIZE_DEFAULT = 1000;
 server.listen(port,function(){
 	console.log('Server start at port '+port);
