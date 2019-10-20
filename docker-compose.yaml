@@ -8,6 +8,6 @@ services:
     expose:
       - 8080
     volumes:
-      - /home/ilya/war-on-map/Geo-server/bases/:/home/ilya/war-on-map/Geo-server/bases/
+      - /home/ilya/war-on-map/bases/:/home/ilya/war-on-map/bases/
 
 
