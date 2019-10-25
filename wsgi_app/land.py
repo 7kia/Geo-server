@@ -39,7 +39,10 @@ def application(environ, start_response):
 def searchObject(point_lat, point_lng, db_file):
     conn = db.connect(DB_DIR + db_file)
     cur = conn.cursor()
-    sql = "SELECT id, geometry, name, sub_type, country, min_lat, min_lng, max_lat, max_lng FROM object WHERE min_lng <= " + str(point_lng) + " AND min_lat <= " + str(point_lat) + " AND max_lng  >= " + str(point_lng) + " AND max_lat >= " + str(point_lat)
+    sql = "SELECT id, geometry, name, sub_type, country, min_lat, min_lng, max_lat, max_lng " \
+          "FROM object " \
+          "WHERE min_lng <= " + str(point_lng) + " AND min_lat <= " + str(point_lat) + \
+          " AND max_lng  >= " + str(point_lng) + " AND max_lat >= " + str(point_lat)
     id = -1
     res = cur.execute(sql)
     for rec in res:

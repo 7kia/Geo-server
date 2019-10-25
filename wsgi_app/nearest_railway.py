@@ -64,10 +64,12 @@ def getNodeId(cur,point,scale):
 	sector = latlng2sector(point[0],point[1],scale)
 	print 'sector=%i' % sector
 	try:
-		cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from rails_nodes where connected=1 and sector=?",(point[1], point[0], sector))
+		cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from rails_nodes "
+					"where connected=1 and sector=?",(point[1], point[0], sector))
 		row = cur.fetchone()
 		if row[0] is None:
-			cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from rails_nodes where sector=?",(point[1],point[0],sector))
+			cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from rails_nodes "
+						"where sector=?",(point[1],point[0],sector))
 			row = cur.fetchone()
 			if row[0] is None:
 				cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from rails_nodes",(point[1],point[0]))

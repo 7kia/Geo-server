@@ -76,7 +76,9 @@ def getListCity(db_file):
 def getPlace(point_lat, point_lng):
     conn = db.connect(DB_DIR + PLACES_DB_FILE)
     cur = conn.cursor()
-    sql = "SELECT id, place_name, place_type, geometry, lat, lng, country, Distance(GeomFromGeoJSON(geometry), MakePoint("+str(point_lng)+","+str(point_lat)+")) as rast from place where Distance(GeomFromGeoJSON(geometry), MakePoint("+str(point_lng)+","+str(point_lat)+")) < " + str(min_rast)
+    sql = "SELECT id, place_name, place_type, geometry, lat, lng, country, " \
+          "Distance(GeomFromGeoJSON(geometry), MakePoint("+str(point_lng)+","+str(point_lat)+")) as rast from place " \
+          "where Distance(GeomFromGeoJSON(geometry), MakePoint("+str(point_lng)+","+str(point_lat)+")) < " + str(min_rast)
     res = cur.execute(sql)
     places = []
     for rec in res:

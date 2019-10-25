@@ -80,7 +80,13 @@ def getWidthRiver(unit1, unit2, db_file):
     # Запрос на поиск пересечения линии между юнитами и рек.
     # Переменная out выходной словарь с данными
 
-    c = sql.execute("SELECT id, name, sub_type, geometry, country, blob FROM water WHERE Crosses(MakeLine(MakePoint(?,?), MakePoint(?,?)), blob)", (unit1[1], unit1[0], unit2[1], unit2[0]))
+    c = sql.execute("SELECT id, name, sub_type, geometry, country, blob FROM water "
+                    "WHERE Crosses("
+                    "MakeLine(MakePoint(?,?), MakePoint(?,?)), "
+                    "blob"
+                    ")",
+                    (unit1[1], unit1[0], unit2[1], unit2[0])
+                    )
     out = {}
 
     # Если тип найденной реки "riverbank", для нее находим ширину реки. Иначе width = -1;
