@@ -12,5 +12,5 @@ class DatabaseFileSearcher:
         # 			min_size = size
         # 			best_file = curr_file
         # return best_file
-        best_file = db_file
+        best_file = db_file + ".sqlite"
         return best_file
