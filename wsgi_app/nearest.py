@@ -8,6 +8,8 @@ import math
 
 import sys
 
+from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
+
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
@@ -26,7 +28,7 @@ def application(environ, start_response):
     point_lng = float(data[1])
     filename = data[2]
     scale = int(data[3])
-    db_file = searchBestDbFile((point_lat, point_lng), filename)
+    db_file = DatabaseFileSearcher.search_best_db_file((point_lat, point_lng), filename)
     # print 'using db_file='+db_file
     response = ""
     try:
@@ -95,18 +97,7 @@ def getNodeId(cur, point, scale):
         return node_id
 
 
-def searchBestDbFile(point, db_file):
-    global DB_DIR
-    db_files = os.listdir(DB_DIR)
-    min_size = MIN_SIZE_DEFAULT
-    best_file = 'undefined'
-    for curr_file in filter(lambda fname: fname.find(db_file) == 0, db_files):
-        if isInside(curr_file, point):
-            size = getAreaSize(curr_file)
-            if size <= min_size:
-                min_size = size
-                best_file = curr_file
-    return best_file
+
 
 
 def isInside(filename, point):
