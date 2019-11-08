@@ -9,6 +9,7 @@ import sys
 import json
 
 from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
+from wsgi_app.roadSearcher import RoadSearcher
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -19,12 +20,12 @@ DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
 
-def application(environ, start_response):
-    begin=time.clock()
-    status = '200 OK'
+def findNearest(environ):
+    begin = time.clock()
+
     d = parse_qs(environ['QUERY_STRING'])
     data = d['data'][0].split(',')
-    #print data
+    # print data
     start_lat = float(data[0])
     start_lng = float(data[1])
     end_lat = float(data[2])
@@ -32,17 +33,24 @@ def application(environ, start_response):
     filename = data[4]
     scale = int(data[5])
     before_searchBestDbFile = time.clock()
-    db_file = DatabaseFileSearcher.search_best_db_file((start_lat,start_lng),(end_lat,end_lng),filename)
-    #print 'using db_file='+db_file
+    db_file = DatabaseFileSearcher.search_best_db_file_by_two_points(
+        (start_lat, start_lng), (end_lat, end_lng),
+        filename
+    )
+    # print 'using db_file='+db_file
     after_searchBestDbFile = time.clock()
-    route = getRoute((start_lat,start_lng),(end_lat,end_lng),db_file,scale)
+    route = getRoute((start_lat, start_lng), (end_lat, end_lng), db_file, scale)
     after_getRoute = time.clock()
-    response = "".join([str(route)])
-    response_headers = [('Content-type', 'text/html'),('Access-Control-Allow-Origin','*'),('Content-Length',str(len(response)))]
-    start_response(status, response_headers)
+
     print 'begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f' % (begin, before_searchBestDbFile, after_searchBestDbFile, after_getRoute)
     print 'time_for_find_files=%s  time_for_find_route=%f' % (after_searchBestDbFile - before_searchBestDbFile, after_getRoute - after_searchBestDbFile)
-    return [response]
+
+    return route
+
+
+def application(environ, start_response):
+    return RoadSearcher.handle_request(environ, start_response, findNearest)
+
 
 def getRoute(start,end,db_file,scale):
     # creating/connecting the db

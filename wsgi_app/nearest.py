@@ -9,6 +9,7 @@ import math
 import sys
 
 from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
+from wsgi_app.roadSearcher import RoadSearcher
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -19,27 +20,26 @@ DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
 
-def application(environ, start_response):
-    status = '200 OK'
-    d = parse_qs(environ['QUERY_STRING'])
-    data = d['data'][0].split(',')
-    # print data
-    point_lat = float(data[0])
-    point_lng = float(data[1])
-    filename = data[2]
-    scale = int(data[3])
-    db_file = DatabaseFileSearcher.search_best_db_file((point_lat, point_lng), filename)
-    # print 'using db_file='+db_file
-    response = ""
+def findNearest(environ):
     try:
+        d = parse_qs(environ['QUERY_STRING'])
+        data = d['data'][0].split(',')
+        # print data
+        point_lat = float(data[0])
+        point_lng = float(data[1])
+        filename = data[2]
+        scale = int(data[3])
+        db_file = DatabaseFileSearcher.search_best_db_file((point_lat, point_lng), filename)
+        # print 'using db_file='+db_file
         nearest = getNearest((point_lat, point_lng), db_file, scale)
-        response = "".join([str(nearest)])
-    except BaseException as e:
-        response = "".join([str(e) + "db_file=" + str(os.listdir(DB_DIR))])
-    response_headers = [('Content-type', 'text/html'), ('Access-Control-Allow-Origin', '*'),
-                            ('Content-Length', str(len(response)))]
-    start_response(status, response_headers)
-    return [response]
+        return nearest
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        return sys.exc_info()[0]
+
+
+def application(environ, start_response):
+    return RoadSearcher.handle_request(environ, start_response, findNearest)
 
 
 def getNearest(point, db_file, scale):
@@ -95,9 +95,6 @@ def getNodeId(cur, point, scale):
     else:
         node_id = row[0]
         return node_id
-
-
-
 
 
 def isInside(filename, point):
