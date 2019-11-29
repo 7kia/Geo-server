@@ -5,7 +5,7 @@ var Route =
 	* 'spatialite_python', 'spatialite_nodejs'
 	**/
 	service: 'spatialite_python',
-	geoserver_py: 'http://geoserver.py:8080',
+	geoserver_py: 'http://waronmap.com:8080',
 	geoserver_php: 'http://php_spa.loc',
 	geoserver_node: 'http://127.0.0.1:8000',
 	directionsService: new google.maps.DirectionsService(),

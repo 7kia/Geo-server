@@ -3,15 +3,17 @@ import os
 import sys
 # importing pyspatialite
 import time
-from urllib.parse import parse_qs
+
+from urlparse import parse_qs
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
+
+
 
 import cors
 import falcon
 from dbManager import dbManager
-
-abspath = os.path.dirname(__file__)
-sys.path.append(abspath)
-os.chdir(abspath)
 import config
 
 DB_DIR = config.DB_DIR

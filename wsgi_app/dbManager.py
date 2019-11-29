@@ -4,7 +4,7 @@ import sqlite3
 #from pyspatialite import dbapi2 as db
 
 def progress(status, remaining, total):
-    print(f'Copied {total-remaining} of {total} pages...')
+    print('Copied {total-remaining} of {total} pages...')
 
 def myMIN(arg):
     console.log(arg)

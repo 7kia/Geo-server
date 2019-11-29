@@ -5,16 +5,14 @@ import sys
 import time
 # importing pyspatialite
 from sqlite3 import dbapi2 as db
-from urllib.parse import parse_qs
-
-import cors
-import falcon
+from urlparse import parse_qs
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
-
+import cors
+import falcon
 DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
