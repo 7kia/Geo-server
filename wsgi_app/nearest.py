@@ -33,7 +33,11 @@ def findNearest(environ):
         # print 'using db_file='+db_file
         nearest = getNearest((point_lat, point_lng), db_file, scale)
         return nearest
+    except BaseException as e:
+        print(e)
+        response = "Error: " + str(e)
     except:
+        print(e)
         print("Unexpected error:", sys.exc_info()[0])
         return sys.exc_info()[0]
 
@@ -44,7 +48,8 @@ def application(environ, start_response):
 
 def getNearest(point, db_file, scale):
     # creating/connecting the db
-    # print 'db_file=%s' % str(db_file)
+    print 'db_file=%s' % str(db_file)
+    print 'DB_DIR=%s' % str(DB_DIR)
     conn = db.connect(DB_DIR + db_file)
     # creating a Cursor
     cur = conn.cursor()

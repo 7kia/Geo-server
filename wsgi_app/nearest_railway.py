@@ -7,14 +7,13 @@ import math
 
 import sys
 
-from wsgi_app.roadSearcher import RoadSearcher
-
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
 
-from .databaseFileSearcher import DatabaseFileSearcher
+from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
+from wsgi_app.roadSearcher import RoadSearcher
 DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
