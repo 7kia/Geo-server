@@ -39,8 +39,6 @@ COPY ./wsgi.conf.tmpl /tmp/wsgi.conf.tmpl
 RUN sed -e s/\$PYVERSION/$PYVERSION/g /tmp/wsgi.conf.tmpl | sed -e s/\$PYV/`echo $PYVERSION | sed -e "s/\\.//"`/g >/etc/apache2/mods-enabled/wsgi.conf
 COPY ./geoservice.waronmap.com.conf /etc/apache2/sites-available/000-default.conf
 
-#VOLUME /var/www/geoserver /home/war-on-map/Geo-server
-
 # Start Apache
 EXPOSE 8080:8080
 CMD ["/bin/sh", "-c","/start-apache.sh"]

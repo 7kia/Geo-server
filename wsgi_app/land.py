@@ -5,8 +5,8 @@ from cgi import parse_qs
 # importing pyspatialite
 from sqlite3 import dbapi2 as db
 
-import cors
-import falcon
+# import cors
+# import falcon
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -91,30 +91,30 @@ def sub_type_filter(sub_type):
     return 'unknown'
 
 
-class Land(object):
-    cors = cors.public_cors
-
-    def on_get(self, req, resp):
-        dataParam = req.get_param('data')
-        data = dataParam.split(',')
-
-        # print(data)
-        point_lat = float(data[0])
-        point_lng = float(data[1])
-        db_file = DB_FILE
-        res = searchObject(point_lat, point_lng, db_file)
-        # print(res)
-        if res != None:
-            response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + res[1] + '","geometry":' + res[
-                2] + ', "country":"' + res[3] + '", "id":' + str(res[4]) + ', "avg_lat":' + str(
-                res[5]) + ', "avg_lng":' + str(res[6]) + '}'
-
-        else:
-            response = '{"res":false}'
-
-        resp.set_header('Content-type', 'text/html; charset=utf-8')
-        resp.status = falcon.HTTP_200
-
-        resp.body = response
-
-land = Land()
+# class Land(object):
+#     cors = cors.public_cors
+#
+#     def on_get(self, req, resp):
+#         dataParam = req.get_param('data')
+#         data = dataParam.split(',')
+#
+#         # print(data)
+#         point_lat = float(data[0])
+#         point_lng = float(data[1])
+#         db_file = DB_FILE
+#         res = searchObject(point_lat, point_lng, db_file)
+#         # print(res)
+#         if res != None:
+#             response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + res[1] + '","geometry":' + res[
+#                 2] + ', "country":"' + res[3] + '", "id":' + str(res[4]) + ', "avg_lat":' + str(
+#                 res[5]) + ', "avg_lng":' + str(res[6]) + '}'
+#
+#         else:
+#             response = '{"res":false}'
+#
+#         resp.set_header('Content-type', 'text/html; charset=utf-8')
+#         resp.status = falcon.HTTP_200
+#
+#         resp.body = response
+#
+# land = Land()

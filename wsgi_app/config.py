@@ -6,6 +6,6 @@ else:
     ENV = 'development'
 
 if ENV == 'production':
-    DB_DIR = '/var/www/bases/'
+    DB_DIR = '/home/ilya/war-on-map/bases/'
 else:
-    DB_DIR = '/var/www/bases/'
+    DB_DIR = '/home/ilya/war-on-map/bases/'

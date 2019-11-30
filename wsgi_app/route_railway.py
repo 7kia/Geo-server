@@ -11,8 +11,8 @@ abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
-import cors
-import falcon
+# import cors
+# import falcon
 DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
@@ -150,44 +150,44 @@ def application(environ, start_response):
         % (after_searchBestDbFile - before_searchBestDbFile, after_getRoute - after_searchBestDbFile))
     return [response]
 
-class RouteRailway(object):
-    cors = cors.public_cors
-    def on_get(self, req, resp):
-        begin = time.clock()
-        dataParam = req.get_param('data')
-        data = dataParam.split(',')
-
-        start_lat = float(data[0])
-        start_lng = float(data[1])
-        end_lat = float(data[2])
-        end_lng = float(data[3])
-        filename = data[4]
-        scale = int(data[5])
-
-        before_searchBestDbFile = time.clock()
-        db_file = searchBestDbFile((start_lat, start_lng), (end_lat, end_lng), filename)
-        # print()'using db_file='+db_file
-        after_searchBestDbFile = time.clock()
-
-        route = getRoute((start_lat, start_lng), (end_lat, end_lng), db_file, scale)
-        after_getRoute = time.clock()
-        response = "".join([str(route)])
-
-        resp.set_header('Content-type', 'text/html')
-        resp.set_header('Content-Length', str(len(response)))
-        resp.status = falcon.HTTP_200
-
-        print('begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f' % (
-            begin,
-            before_searchBestDbFile,
-            after_searchBestDbFile,
-            after_getRoute
-        ))
-        print('time_for_find_files=%s  time_for_find_route=%f' % (
-            after_searchBestDbFile - before_searchBestDbFile,
-            after_getRoute - after_searchBestDbFile
-        ))
-
-        resp.body = response
-
-routeRailway = RouteRailway()
+# class RouteRailway(object):
+#     cors = cors.public_cors
+#     def on_get(self, req, resp):
+#         begin = time.clock()
+#         dataParam = req.get_param('data')
+#         data = dataParam.split(',')
+#
+#         start_lat = float(data[0])
+#         start_lng = float(data[1])
+#         end_lat = float(data[2])
+#         end_lng = float(data[3])
+#         filename = data[4]
+#         scale = int(data[5])
+#
+#         before_searchBestDbFile = time.clock()
+#         db_file = searchBestDbFile((start_lat, start_lng), (end_lat, end_lng), filename)
+#         # print()'using db_file='+db_file
+#         after_searchBestDbFile = time.clock()
+#
+#         route = getRoute((start_lat, start_lng), (end_lat, end_lng), db_file, scale)
+#         after_getRoute = time.clock()
+#         response = "".join([str(route)])
+#
+#         resp.set_header('Content-type', 'text/html')
+#         resp.set_header('Content-Length', str(len(response)))
+#         resp.status = falcon.HTTP_200
+#
+#         print('begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f' % (
+#             begin,
+#             before_searchBestDbFile,
+#             after_searchBestDbFile,
+#             after_getRoute
+#         ))
+#         print('time_for_find_files=%s  time_for_find_route=%f' % (
+#             after_searchBestDbFile - before_searchBestDbFile,
+#             after_getRoute - after_searchBestDbFile
+#         ))
+#
+#         resp.body = response
+#
+# routeRailway = RouteRailway()

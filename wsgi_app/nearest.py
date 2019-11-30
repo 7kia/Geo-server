@@ -5,8 +5,8 @@ from cgi import parse_qs
 # importing pyspatialite
 from sqlite3 import dbapi2 as db
 
-import cors
-import falcon
+# import cors
+# import falcon
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -126,27 +126,27 @@ def getAreaSize(filename):
     size = boundary['top'] - boundary['bottom']
     return size
 
-class Nearest(object):
-    cors = cors.public_cors
-
-    def on_get(self, req, resp):
-        dataParam = req.get_param('data')
-        data = dataParam.split(',')
-
-        point_lat = float(data[0])
-        point_lng = float(data[1])
-        filename = data[2]
-        scale = int(data[3])
-
-        db_file = searchBestDbFile((point_lat, point_lng), filename)
-        # print('using db_file='+db_file)
-        nearest = getNearest((point_lat, point_lng), db_file, scale)
-
-        response = "".join([str(nearest)])
-        resp.set_header('Content-type', 'text/html')
-        resp.set_header('Content-Length', str(len(response)))
-        resp.status = falcon.HTTP_200
-
-        resp.body = response
-
-nearest = Nearest()
+# class Nearest(object):
+#     cors = cors.public_cors
+#
+#     def on_get(self, req, resp):
+#         dataParam = req.get_param('data')
+#         data = dataParam.split(',')
+#
+#         point_lat = float(data[0])
+#         point_lng = float(data[1])
+#         filename = data[2]
+#         scale = int(data[3])
+#
+#         db_file = searchBestDbFile((point_lat, point_lng), filename)
+#         # print('using db_file='+db_file)
+#         nearest = getNearest((point_lat, point_lng), db_file, scale)
+#
+#         response = "".join([str(nearest)])
+#         resp.set_header('Content-type', 'text/html')
+#         resp.set_header('Content-Length', str(len(response)))
+#         resp.status = falcon.HTTP_200
+#
+#         resp.body = response
+#
+# nearest = Nearest()

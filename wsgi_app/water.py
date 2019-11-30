@@ -7,8 +7,8 @@ from cgi import parse_qs
 # importing pyspatialite
 from sqlite3 import dbapi2 as db
 
-import cors
-import falcon
+# import cors
+# import falcon
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -111,26 +111,26 @@ def application(environ, start_response):
     return [response]
 
 
-class WaterObject(object):
-    cors = cors.public_cors
-    def on_get(self, req, resp):
-        dataParam = req.get_param('data')
-        data = dataParam.split(',')
-
-        lat1 = float(data[0])
-        lng1 = float(data[1])
-        lat2 = float(data[2])
-        lng2 = float(data[3])
-        db_file = DB_DIR + DB_FILE
-        res = getWidthRiver((lat1, lng1), (lat2, lng2), db_file)
-        # print()res
-        if res != None:
-            response = json.dumps({"res": True, "waters": res})
-        else:
-            response = json.dumps({"res": False})
-
-        resp.set_header('Content-type', 'text/html; charset=utf-8')
-        resp.status = falcon.HTTP_200
-
-        resp.body = response
-waterObject = WaterObject()
+# class WaterObject(object):
+#     cors = cors.public_cors
+#     def on_get(self, req, resp):
+#         dataParam = req.get_param('data')
+#         data = dataParam.split(',')
+#
+#         lat1 = float(data[0])
+#         lng1 = float(data[1])
+#         lat2 = float(data[2])
+#         lng2 = float(data[3])
+#         db_file = DB_DIR + DB_FILE
+#         res = getWidthRiver((lat1, lng1), (lat2, lng2), db_file)
+#         # print()res
+#         if res != None:
+#             response = json.dumps({"res": True, "waters": res})
+#         else:
+#             response = json.dumps({"res": False})
+#
+#         resp.set_header('Content-type', 'text/html; charset=utf-8')
+#         resp.status = falcon.HTTP_200
+#
+#         resp.body = response
+# waterObject = WaterObject()
