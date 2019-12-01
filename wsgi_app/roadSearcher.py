@@ -7,9 +7,7 @@ class RoadSearcher:
         response = ""
         try:
             response = "".join(
-                str(
-                    [str(function1(environ))]
-                )
+                [str(function1(environ))]
             )
         except BaseException as e:
             response = "Error: " + str(e)
