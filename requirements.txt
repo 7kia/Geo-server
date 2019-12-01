@@ -1,4 +1,3 @@
 falcon
 falcon-cors
 geojson
-mod_wsgi

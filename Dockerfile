@@ -34,6 +34,7 @@ WORKDIR /var/www/Geo-server
 RUN virtualenv venv
 RUN ./venv/bin/pip2 install --upgrade pip setuptools
 RUN ./venv/bin/pip2 install mod_wsgi==4.4.12
+RUN ./venv/bin/pip2 install -r requirements.txt
 COPY pyspatialite ./venv/lib/python2.7/site-packages/pyspatialite
 
 # Prepare app directory
