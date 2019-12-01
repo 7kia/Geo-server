@@ -7,13 +7,13 @@ import os
 import math
 import sys
 
-from databaseFileSearcher import DatabaseFileSearcher
-from roadSearcher import RoadSearcher
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
+from databaseFileSearcher import DatabaseFileSearcher
+from roadSearcher import RoadSearcher
 
 MIN_SIZE_DEFAULT = 1000
 

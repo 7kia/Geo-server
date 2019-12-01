@@ -8,13 +8,13 @@ import math
 import sys
 import json
 
-from databaseFileSearcher import DatabaseFileSearcher
-from roadSearcher import RoadSearcher
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
+from databaseFileSearcher import DatabaseFileSearcher
+from roadSearcher import RoadSearcher
 
 DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
