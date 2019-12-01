@@ -12,8 +12,8 @@ sys.path.append(abspath)
 os.chdir(abspath)
 import config
 
-from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
-from wsgi_app.roadSearcher import RoadSearcher
+from databaseFileSearcher import DatabaseFileSearcher
+from roadSearcher import RoadSearcher
 DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 

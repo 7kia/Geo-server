@@ -7,46 +7,45 @@ import os
 import math
 import sys
 
-from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
-from wsgi_app.roadSearcher import RoadSearcher
+from databaseFileSearcher import DatabaseFileSearcher
+from roadSearcher import RoadSearcher
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
 
-DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
 
 def find_nearest(environ):
     # try:
-        begin = time.clock()
+    begin = time.clock()
 
-        d = parse_qs(environ['QUERY_STRING'])
-        data = d['data'][0].split(',')
-        # print data
-        start_lat = float(data[0])
-        start_lng = float(data[1])
-        end_lat = float(data[2])
-        end_lng = float(data[3])
-        filename = data[4]
-        scale = int(data[5])
-        before_searchBestDbFile = time.clock()
-        db_file = DatabaseFileSearcher.search_best_db_file_by_two_points(
-            (start_lat, start_lng), (end_lat, end_lng),
-            filename
-        )
-        # print 'using db_file='+db_file
-        after_searchBestDbFile = time.clock()
-        route = getRoute((start_lat, start_lng), (end_lat, end_lng), db_file, scale)
-        after_getRoute = time.clock()
+    d = parse_qs(environ['QUERY_STRING'])
+    data = d['data'][0].split(',')
+    # print data
+    start_lat = float(data[0])
+    start_lng = float(data[1])
+    end_lat = float(data[2])
+    end_lng = float(data[3])
+    filename = data[4]
+    scale = int(data[5])
+    before_searchBestDbFile = time.clock()
+    db_file = DatabaseFileSearcher.search_best_db_file_by_two_points(
+        (start_lat, start_lng), (end_lat, end_lng),
+        filename
+    )
+    # print 'using db_file='+db_file
+    after_searchBestDbFile = time.clock()
+    route = getRoute((start_lat, start_lng), (end_lat, end_lng), db_file, scale)
+    after_getRoute = time.clock()
 
-        print 'begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f' % (
-        begin, before_searchBestDbFile, after_searchBestDbFile, after_getRoute)
-        print 'time_for_find_files=%s  time_for_find_route=%f' % (
-        after_searchBestDbFile - before_searchBestDbFile, after_getRoute - after_searchBestDbFile)
-        return route
+    print 'begin=%f, before_searchBestDbFile=%f, after_searchBestDbFile=%f, after_getRoute=%f' % (
+    begin, before_searchBestDbFile, after_searchBestDbFile, after_getRoute)
+    print 'time_for_find_files=%s  time_for_find_route=%f' % (
+    after_searchBestDbFile - before_searchBestDbFile, after_getRoute - after_searchBestDbFile)
+    return route
     # except:
     #     # print("Unexpected error:", sys.exc_info()[0])
     #     return sys.exc_info()[0]

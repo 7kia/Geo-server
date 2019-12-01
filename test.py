@@ -1,11 +1,11 @@
-from wsgi_app.nearest import findNearest as nearest
-from wsgi_app.route import find_nearest as route
-from wsgi_app.route import application
+from nearest import findNearest as nearest
+from route import find_nearest as route
+from route import application
 
-from wsgi_app.route_railway import findNearest as route_railway
-from wsgi_app.nearest_railway import findNearest as nearest_railway
+from route_railway import findNearest as route_railway
+from nearest_railway import findNearest as nearest_railway
 
-from wsgi_app.roadSearcher import RoadSearcher
+from roadSearcher import RoadSearcher
 
 
 if __name__ == "__main__":

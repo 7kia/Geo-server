@@ -8,8 +8,8 @@ import math
 
 import sys
 
-from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
-from wsgi_app.roadSearcher import RoadSearcher
+from databaseFileSearcher import DatabaseFileSearcher
+from roadSearcher import RoadSearcher
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -21,25 +21,17 @@ MIN_SIZE_DEFAULT = 1000
 
 
 def findNearest(environ):
-    try:
-        d = parse_qs(environ['QUERY_STRING'])
-        data = d['data'][0].split(',')
-        # print data
-        point_lat = float(data[0])
-        point_lng = float(data[1])
-        filename = data[2]
-        scale = int(data[3])
-        db_file = DatabaseFileSearcher.search_best_db_file((point_lat, point_lng), filename)
-        # print 'using db_file='+db_file
-        nearest = getNearest((point_lat, point_lng), db_file, scale)
-        return nearest
-    except BaseException as e:
-        print(e)
-        response = "Error: " + str(e)
-    except:
-        print(e)
-        print("Unexpected error:", sys.exc_info()[0])
-        return sys.exc_info()[0]
+    d = parse_qs(environ['QUERY_STRING'])
+    data = d['data'][0].split(',')
+    # print data
+    point_lat = float(data[0])
+    point_lng = float(data[1])
+    filename = data[2]
+    scale = int(data[3])
+    db_file = DatabaseFileSearcher.search_best_db_file((point_lat, point_lng), filename)
+    # print 'using db_file='+db_file
+    nearest = getNearest((point_lat, point_lng), db_file, scale)
+    return nearest
 
 
 def application(environ, start_response):

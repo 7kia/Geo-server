@@ -8,8 +8,8 @@ import math
 import sys
 import json
 
-from wsgi_app.databaseFileSearcher import DatabaseFileSearcher
-from wsgi_app.roadSearcher import RoadSearcher
+from databaseFileSearcher import DatabaseFileSearcher
+from roadSearcher import RoadSearcher
 
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
